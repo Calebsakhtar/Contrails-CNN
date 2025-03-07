@@ -25,8 +25,8 @@ def calculate_cutoff_indexes(ds, alt_min_ft_AMSL, alt_max_ft_AMSL):
 
     global min_level
     global max_level
-    min_level = min(min_level, ds["pressure_level"].values[min_idx])
-    max_level = max(max_level, ds["pressure_level"].values[max_idx])
+    min_level = min(min_level, ds["pressure_level"].values[max_idx])
+    max_level = max(max_level, ds["pressure_level"].values[min_idx])
 
     return min_idx, max_idx
 
