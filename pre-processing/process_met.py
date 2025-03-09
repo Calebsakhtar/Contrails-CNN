@@ -63,12 +63,7 @@ def filter_RHi(ds, alt_min_ft_AMSL, alt_max_ft_AMSL):
 
     return mask
 
-
-if __name__ == "__main__":
-    ipdir = "inputs/"
-    opdir = "processed_data/"
-    delete = True
-
+def process_data(ipdir, opdir, delete=False):
     # Clear the output directory if requested and it exists
     if delete and os.path.exists(opdir):
         shutil.rmtree(opdir)
@@ -81,7 +76,7 @@ if __name__ == "__main__":
         file_path = os.path.join(ipdir, filename)
 
         if filename.endswith(".nc"):  # Ensures it's a file
-            ds = xr.open_dataset(f"inputs/{filename}", engine="netcdf4")
+            ds = xr.open_dataset(file_path, engine="netcdf4")
             filename = filename.split(".")[0]
             
             times = ds["valid_time"].values
@@ -102,4 +97,13 @@ if __name__ == "__main__":
                 )
         
     print(f"Min level: {min_level}, Max level: {max_level}")
-    print("Done!")
+
+if __name__ == "__main__":
+    opdir = "processed_data/"
+    cwd = os.getcwd()
+
+    for root, dirs, files in os.walk(cwd):
+        for dir in dirs:
+            if "inputs" in dir:
+                input_dir = os.path.join(root, dir)
+                process_data(input_dir, opdir, delete=False)

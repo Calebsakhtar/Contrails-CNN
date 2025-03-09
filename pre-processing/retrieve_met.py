@@ -43,13 +43,13 @@ reques_template = {
     "area": [71, -83, 35, 3]
 }
 
-def retrieve_era5_data(year, month, download_dir="inputs"):
+def retrieve_era5_data_month(year, month, download_dir="inputs"):
     global request_template
     dataset = "reanalysis-era5-pressure-levels"
     
     # Make the download directory if it doesn't exist
     if not os.path.exists(download_dir):
-        os.makedirs(download_dir, exist_ok=True)
+        os.makedirs(download_dir)
 
     # Determine the number of days in the month
     num_days = calendar.monthrange(int(year), int(month))[1] #https://docs.python.org/3/library/calendar.html#calendar.monthrange
@@ -75,8 +75,17 @@ def retrieve_era5_data(year, month, download_dir="inputs"):
 
 if __name__ == "__main__":
     year = 2018
-    start_month = 1
-    end_month = 6
+    split_month = 6
+    
+    start_months = [1, split_month + 1]
+    end_months = [split_month, 12]
 
-    for month in range(start_month, end_month + 1):
-        retrieve_era5_data(year, month)
+    for i in range(len(start_months)):
+        start_month = start_months[i]
+        end_month = end_months[i]
+
+        for month in range(start_month, end_month + 1):
+            retrieve_era5_data_month(year, month, download_dir=f"inputs-{year}-{start_month:02d}to{end_month:02d}")
+            print(f"Data for {year}-{month:02d} retrieved.")
+
+        break
