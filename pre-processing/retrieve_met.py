@@ -63,7 +63,8 @@ def retrieve_era5_data_month(year, month, download_dir="inputs"):
             upper = num_days + 1
 
         days = [f"{day:02d}" for day in range(lower, upper)]
-        target = f"{download_dir}/{year}{month:02d}-{lower:02d}to{upper:02d}.nc"
+        max_day = upper - 1
+        target = f"{download_dir}/{year}{month:02d}-{lower:02d}to{max_day:02d}.nc"
         
         request = reques_template.copy()
         request["day"] = days
@@ -75,17 +76,10 @@ def retrieve_era5_data_month(year, month, download_dir="inputs"):
 
 if __name__ == "__main__":
     year = 2018
-    split_month = 6
-    
-    start_months = [1, split_month + 1]
-    end_months = [split_month, 12]
 
-    for i in range(len(start_months)):
-        start_month = start_months[i]
-        end_month = end_months[i]
+    start_month = 5
+    end_month = 8
 
-        for month in range(start_month, end_month + 1):
-            retrieve_era5_data_month(year, month, download_dir=f"inputs-{year}-{start_month:02d}to{end_month:02d}")
-            print(f"Data for {year}-{month:02d} retrieved.")
-
-        break
+    for month in range(start_month, end_month + 1):
+        retrieve_era5_data_month(year, month, download_dir=f"inputs-{year}-{start_month:02d}to{end_month:02d}")
+        print(f"Data for {year}-{month:02d} retrieved.")
